@@ -12,6 +12,14 @@ try:
 except Exception:  # pragma: no cover - defensive path
     pd = None
 
+# This report prints emoji icons (checkmarks, warning signs, etc.). Some
+# terminals - notably the default Windows console - use a legacy code
+# page that can't encode them and would crash with UnicodeEncodeError.
+# Reconfigure stdout/stderr to UTF-8 so the report always prints cleanly.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 
 REPO_ROOT = Path(__file__).resolve().parent
 HEALTH_CHECK_VERSION = "1.0.0"
@@ -27,13 +35,13 @@ SUBSECTION_SEPARATOR = "-" * 40
 
 REQUIRED_FILES = [
     "README.md",
-    "Developer_Handover.md",
     "requirements.txt",
     "submit.py",
     "src",
     "src/pipeline.py",
     "src/model.py",
     "src/train.py",
+    "src/evaluation.py",
     "data",
     "data/train.csv",
     "data/test.csv",
