@@ -129,41 +129,46 @@ about trade-offs and validate your improvements.
 
 # 📁 Repository Structure
 
-```
-regression/
-│
+```text
+.
 ├── README.md
-├── Developer_Handover.md
 ├── requirements.txt
 ├── health_check.py
 ├── submit.py
+├── .gitignore
 │
 ├── data/
 │   ├── train.csv
 │   ├── test.csv
 │   └── sample_submission.csv
 │
+├── datasets/
+│   ├── original/
+│   └── curated/
+│
 ├── src/
 │   ├── pipeline.py
 │   ├── model.py
-│   └── train.py
+│   ├── train.py
+│   └── evaluation.py
 │
 └── outputs/
 ```
 
 ---
 
-# 📖 Repository Guide
+# 🗂️ Dataset Organization
 
-## 📄 Developer_Handover.md
+- **data/** – Contains the datasets used directly by the challenge.
+- **datasets/original** – Contains the raw Ames Housing dataset.
+- **datasets/curated** – Contains a cleaned reference dataset.
 
-Notes left by the previous AI Engineer.
-
-These notes provide context about the project, implementation decisions,
-observations, and known concerns. As in many real-world handovers, some
-information may be incomplete or require verification.
+The pipeline always reads from **data/**. The **datasets/** folder exists
+only for educational reference.
 
 ---
+
+# 📖 Repository Guide
 
 ## 🩺 health_check.py
 
@@ -192,6 +197,19 @@ Contains the datasets used in this challenge.
 - **train.csv** – Training dataset
 - **test.csv** – Dataset for prediction
 - **sample_submission.csv** – Reference submission format
+
+---
+
+## 📂 datasets/
+
+Provided for learning and reference purposes only.
+
+- **original/** – Contains the original Ames Housing dataset.
+- **curated/** – Contains a cleaned reference dataset used while preparing
+  the challenge.
+
+The Machine Learning pipeline uses the files inside **data/**, not this
+folder.
 
 ---
 
@@ -240,11 +258,27 @@ reviewing the health report.
 
 ---
 
+### evaluation.py
+
+Responsible for:
+
+- Regression evaluation
+- Metric calculation
+- Evaluation report generation
+
+---
+
 ## 📂 outputs/
 
 Automatically generated after running the project.
 
 Contains the generated outputs required for submission.
+
+---
+
+# 🧰 Requirements
+
+- Python 3.10 or newer
 
 ---
 
@@ -289,6 +323,29 @@ pip install -r requirements.txt
 
 ---
 
+# 🧭 Before You Start
+
+This challenge intentionally contains Machine Learning engineering issues
+rather than programming errors.
+
+The repository runs successfully from end to end.
+
+Your objective is to improve the Machine Learning pipeline using sound
+engineering practices.
+
+Focus on:
+
+- preprocessing
+- feature engineering
+- feature selection
+- validation methodology
+- model selection
+- hyperparameter tuning
+
+Take time to understand the pipeline before modifying it.
+
+---
+
 # ▶️ Running the Project
 
 ### Step 1 — Check Repository Health
@@ -320,12 +377,11 @@ python submit.py
 To make the best use of your time, we recommend following this sequence:
 
 1. Run **health_check.py**
-2. Read **Developer_Handover.md**
-3. Explore **src/train.py**
-4. Follow the execution flow into **pipeline.py** and **model.py**
-5. Identify and fix issues
-6. Retrain the model
-7. Generate your submission using **submit.py**
+2. Explore **src/train.py**
+3. Follow the execution flow into **pipeline.py** and **model.py**
+4. Identify and fix Machine Learning issues
+5. Retrain the model
+6. Generate submission using **submit.py**
 
 ---
 

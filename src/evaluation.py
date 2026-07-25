@@ -40,12 +40,32 @@ SEPARATOR = "=" * 50
 SUBSECTION_SEPARATOR = "-" * 40
 
 # Simple educational scoring formula.
-# Start from 100 points and subtract 1 point for every $1,000 of
-# average prediction error (MAE). This keeps the score easy for
-# beginners to reason about: a lower MAE always means a higher score.
+#
+# score = 100 * (1 - MAE / REFERENCE_MAE), clipped to the 0-100 range.
+#
+# REFERENCE_MAE is the error level treated as "0 points" - it anchors
+# the scale, the same way a naive/no-skill baseline anchors R2. Cutting
+# MAE in half always earns the same number of points, no matter where
+# you start, so the formula stays linear and easy to reason about:
+# a lower MAE always means a higher score.
+#
+# The original version of this formula (score = 100 - MAE / 1000) used
+# a divisor so large that the untouched starter pipeline already scored
+# ~93/100. That left almost no visible headroom for participants who
+# did the work of fixing preprocessing, feature engineering, and model
+# selection - a 20-30% real-world reduction in error barely moved the
+# number. REFERENCE_MAE is calibrated instead so the untouched baseline
+# lands around 65-75 ("working baseline"), and genuine improvements are
+# clearly visible as the score climbs toward 90-100 ("outstanding"):
+#
+#   60-70  -> working baseline
+#   70-85  -> good improvement
+#   85-95  -> excellent ML engineering
+#   95-100 -> outstanding solution
+#
 # It is only used for this challenge, not a real-world metric.
 SCORE_MAX = 100
-DOLLARS_PER_PENALTY_POINT = 1000
+REFERENCE_MAE = 24000
 
 
 def calculate_metrics(y_true, y_pred):
@@ -82,9 +102,9 @@ def calculate_cross_validation(model, X, y, cv=5):
 def calculate_score(mae):
     """Convert MAE into a simple 0-100 educational challenge score.
 
-    Formula: score = 100 - (MAE / 1000), clipped to the 0-100 range.
+    Formula: score = 100 * (1 - MAE / REFERENCE_MAE), clipped to 0-100.
     """
-    score = SCORE_MAX - (mae / DOLLARS_PER_PENALTY_POINT)
+    score = SCORE_MAX * (1 - (mae / REFERENCE_MAE))
     return max(0.0, min(SCORE_MAX, score))
 
 
